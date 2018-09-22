@@ -1,0 +1,48 @@
+SVN Documentation
+-----------------
+
+
+Create new repo
+---------------
+
+1) mkdir /data/SubVersion/repos/demo
+
+2) chmod 755 -R /data/SubVersion/repos/demo
+
+3) chown www-data:www-data -R /data/SubVersion/repos/demo
+
+4) svnadmin create /data/SubVersion/repos/demo     --> This command will generate configuration file passwd, auth for user access
+
+5) vim /data/SubVersion/repos/demo/conf/svnserve.conf
+
+anon-access = none
+auth-access = write
+password-db = passwd
+
+6) vim /data/SubVersion/repos/demo/conf/passwd
+
+username = userpassword
+
+7) svnserve -d -r /data/SubVersion/repos/demo
+
+
+8) vim /etc/subversion/svnaccess
+
+ADD GROUP = USER NAME
+
+9) vim /data/SubVersion/repos/EmbassySolution/conf/authz
+
+* = rw
+
+
+Use the same command to create additional users ( Same changing users password )
+--------------------------------------------------------------------------------
+1) htpasswd -m /etc/subversion/passwd usertomodify
+
+cat /etc/subversion/passwd
+
+
+http://svn.connectm.lan/	
+
+
+

@@ -1,0 +1,100 @@
+How to Install Subversion Server on Ubuntu 16.04
+------------------------------------------------
+
+Subversion is a free/open supply variation manipulate process (VCS). That is, Subversion manages records and directories, and the alterations made to them, over time. This makes it possible for you to get better and older models of your information or evaluate the historical past of how your data is modified. On this regard, many people suppose of a variation to manage procedure as a variety of “time computing device.”
+
+Before installing subversion, it should require apache. To install apache, use the following commands-
+-------------------------------------------------------------------------------------------------------------------------------------
+
+sudo apt-get update
+sudo apt-get install apache2
+
+To install SVN, use the following command –
+-------------------------------------------
+
+sudo apt-get install subversion libapache2-mod-svn libapache2-svn libsvn-dev
+
+Now create a directory for test project as shown below –
+--------------------------------------------------------
+
+sudo mkdir -p /svn/repos/
+
+To create a repository, use the following command –
+----------------------------------------------------
+
+sudo svnadmin create /svn/repos/testrepo
+
+To change the privileges of repository, use the following command –
+--------------------------------------------------------------------
+
+sudo chown -R www-data:www-data /svn/repos/testrepo
+
+Create a file sample.conf in /etc/apache2/sites-available/ as shown below –
+-----------------------------------------------------------------------------
+
+cd /etc/apache2/sites-available
+
+vim myfirstrepo.conf
+
+<VirtualHost *:80>
+        ServerAdmin webmaster@localhost
+        ServerName  svn.yogesh.lan
+        ServerAlias yogesh.lan
+              <Directory /svn/repos>
+                Options Indexes FollowSymLinks MultiViews
+                AllowOverride None
+                Order allow,deny
+                allow from all
+        </Directory>
+<Location /svn>
+  DAV svn
+  SVNParentPath /svn/repos/
+  AuthType Basic
+  AuthName "Tutorials Point"
+  AuthUserFile /etc/svnpasswd
+  Require valid-user
+ </Location>
+ErrorLog ${APACHE_LOG_DIR}/svn-error.log
+
+        # Possible values include: debug, info, notice, warn, error, crit,
+        # alert, emerg.
+        LogLevel warn
+
+        CustomLog ${APACHE_LOG_DIR}/svn-access.log combined
+</VirtualHost>
+
+-------------------------------------------------------------------------------------------------------
+
+To enable the site  use the following command –
+-----------------------------------------------
+
+sudo a2ensite myfirstrepo.conf
+
+Use the following command to create user for accessing repository and add the user details to /etc/svnpasswd file as shown below –
+----------------------------------------------------------------------------------------------------------------------------------
+
+sudo htpasswd -cm /etc/svnpasswd sai
+
+In the above command, it create a use name as sai and asks for password as shown below –
+----------------------------------------------------------------------------------------
+
+sudo htpasswd -cm /etc/svnpasswd sai
+New password: 
+Re-type new password: 
+Adding password for user sai
+
+If you want to add more user follow below command-
+--------------------------------------------------
+sudo htpasswd -m /etc/svnpasswd karthik
+sudo htpasswd -m /etc/svnpasswd yogesh
+
+Now open your favorite browser and the following url as shown below –
+---------------------------------------------------------------------
+
+http://localhost/svn/testrepo/
+
+
+It will ask ur username and passwd from svn server
+-------------------------------------------------------------------------------------------------------------------------------
+
+
